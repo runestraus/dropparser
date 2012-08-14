@@ -11,17 +11,15 @@ def main():
 	words = [w.lower().replace("\n","") for w in open("common.txt", "r").readlines()]
 	comp = open(str(datetime.date.today()) + ".txt", "w")
 	digits = re.compile("\d")
+	count = 0
 	for domain_row in csv:
 		domain = domain_row[0].replace(".com", "")
-		if (digits.search(domain) != None):
-			continue
-		if (len(domain) > 12):
-			continue
-		if (domain.find("-") != -1):
+		if (digits.search(domain) != None or len(domain) > 12 or domain.find("-") != -1):
 			continue
 		if (is_all_words(domain, words) == True):
+			count += 1
 			comp.write(domain + "\n")
-	print "Compilation complete"
+	print "Completed. Total domains: {}, Parsed domains: {}".format(len(csv), count)
 
 def is_all_words(string, dct):
 	str_len = len(string)
