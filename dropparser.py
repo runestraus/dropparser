@@ -1,13 +1,16 @@
 import csv
 import re
 import nltk
+import datetime
 
 def main():
 	csv = filter(lambda x: x[1] == "com" , open_file()) # get all .com's
-	words = [w for w in nltk.corpus.words.words('en') if w.islower() and len(w) >= 2 and len(w) <= 10 or w == "i" or w == "a"]
-	comp = open("comp.txt", "w")
+	#words = [w for w in nltk.corpus.words.words('en') if w.islower() and len(w) >= 2 and len(w) <= 10 or w == "i" or w == "a"]
+	words = [w.lower().replace("\n","") for w in open("common.txt", "r").readlines()]
+	comp = open(str(datetime.date.today()) + ".txt", "w")
 	digits = re.compile("\d")
 	check = []
+	print words
 	for domain_row in csv:
 		domain = domain_row[0].replace(".com", "")
 		if (digits.search(domain) != None):
@@ -17,6 +20,7 @@ def main():
 		if (domain.find("-") != -1):
 			continue
 		if (is_all_words(domain, words) == True):
+			print domain
 			comp.write(domain + "\n")
 	print "Compilation complete"
 
